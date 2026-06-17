@@ -605,19 +605,11 @@ Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
 ## ✨ Autor
 
 **Seu Nome**
-- GitHub: [@seu-usuario](https://github.com/seu-usuario)
-- LinkedIn: [seu-perfil](https://linkedin.com/in/seu-perfil)
+- GitHub: [@gabrielfrazao](https://github.com/gabrielfrazao)
+- LinkedIn: [seu-perfil](https://www.linkedin.com/in/gabriel-frazao-manoel/)
+
 
 ---
 
-## 🙏 Agradecimentos
-
-- [Fastify Team](https://www.fastify.io/) pelo framework incrível
-- Comunidade Node.js por ferramentas e suporte
-- Você por usar esta API! 🏎️
-
----
-
-**Versão:** 1.0.0  
-**Última Atualização:** Janeiro 2024  
+**Versão:** 1.0.0   
 **Status:** ✅ Ativo e em desenvolvimento
