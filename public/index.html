@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏎️ Formula 1 API - Interface</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>🏎️ Formula 1</h1>
+                    <p>API Fastify - Gerenciador de Pilotos</p>
+                </div>
+                <div class="theme-toggle">
+                    <button id="themeBtn" class="theme-btn" title="Mudar tema">
+                        <span>🌙</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <button class="nav-btn active" data-view="dashboard">📊 Dashboard</button>
+            <button class="nav-btn" data-view="drivers">👥 Pilotos</button>
+            <button class="nav-btn" data-view="create">➕ Novo Piloto</button>
+            <button class="nav-btn" data-view="ranking">🏆 Ranking</button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main">
+            
+            <!-- Dashboard View -->
+            <section id="dashboard" class="view active">
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <h3>Total de Pilotos</h3>
+                        <p class="stat-number" id="totalDrivers">-</p>
+                        <span class="stat-icon">👥</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Times</h3>
+                        <p class="stat-number" id="totalTeams">-</p>
+                        <span class="stat-icon">🏁</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Pontos do Líder</h3>
+                        <p class="stat-number" id="leaderPoints">-</p>
+                        <span class="stat-icon">⭐</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Campeonatos</h3>
+                        <p class="stat-number" id="totalChampionships">-</p>
+                        <span class="stat-icon">🏆</span>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h2>Ações Rápidas</h2>
+                    <div class="actions-grid">
+                        <button class="action-btn" onclick="switchView('drivers')">
+                            <span>👥</span>
+                            Ver Pilotos
+                        </button>
+                        <button class="action-btn" onclick="switchView('ranking')">
+                            <span>🏆</span>
+                            Ver Ranking
+                        </button>
+                        <button class="action-btn" onclick="switchView('create')">
+                            <span>➕</span>
+                            Adicionar Piloto
+                        </button>
+                        <button class="action-btn" onclick="reloadData()">
+                            <span>🔄</span>
+                            Recarregar
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Drivers View -->
+            <section id="drivers" class="view">
+                <div class="view-header">
+                    <h2>👥 Pilotos</h2>
+                    <div class="filters">
+                        <input type="text" id="searchDriver" placeholder="🔍 Buscar piloto..." class="search-input">
+                        <select id="filterTeam" class="filter-select">
+                            <option value="">Todos os Times</option>
+                        </select>
+                        <select id="filterSort" class="filter-select">
+                            <option value="default">Ordenar por</option>
+                            <option value="points">Pontos (Alto para Baixo)</option>
+                            <option value="name">Nome (A-Z)</option>
+                            <option value="championships">Campeonatos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="driversList" class="drivers-grid">
+                    <div class="loading">Carregando pilotos...</div>
+                </div>
+            </section>
+
+            <!-- Create Driver View -->
+            <section id="create" class="view">
+                <div class="form-container">
+                    <h2>➕ Novo Piloto</h2>
+                    <form id="createForm" class="driver-form">
+                        <div class="form-group">
+                            <label for="driverName">Nome *</label>
+                            <input type="text" id="driverName" required placeholder="Ex: Max Verstappen">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="driverTeam">Time *</label>
+                            <input type="text" id="driverTeam" required placeholder="Ex: Red Bull Racing">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="driverNationality">Nacionalidade *</label>
+                                <input type="text" id="driverNationality" required placeholder="Ex: Dutch">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="driverNumber">Número *</label>
+                                <input type="number" id="driverNumber" required placeholder="Ex: 1" min="1" max="999">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="driverPoints">Pontos</label>
+                                <input type="number" id="driverPoints" value="0" min="0" placeholder="0">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="driverChampionships">Campeonatos</label>
+                                <input type="number" id="driverChampionships" value="0" min="0" placeholder="0">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">✅ Criar Piloto</button>
+                            <button type="reset" class="btn btn-secondary">🔄 Limpar</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Ranking View -->
+            <section id="ranking" class="view">
+                <div class="view-header">
+                    <h2>🏆 Ranking de Pilotos</h2>
+                </div>
+
+                <div id="rankingList" class="ranking-container">
+                    <div class="loading">Carregando ranking...</div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Modals -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close">&times;</span>
+                <h2>✏️ Editar Piloto</h2>
+                <form id="editForm" class="driver-form">
+                    <input type="hidden" id="editDriverId">
+
+                    <div class="form-group">
+                        <label for="editName">Nome</label>
+                        <input type="text" id="editName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editTeam">Time</label>
+                        <input type="text" id="editTeam" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editPoints">Pontos</label>
+                            <input type="number" id="editPoints" required min="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editChampionships">Campeonatos</label>
+                            <input type="number" id="editChampionships" required min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">✅ Salvar</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">❌ Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close">&times;</span>
+                <h2>⚠️ Confirmar Exclusão</h2>
+                <p id="deleteMessage">Tem certeza que deseja remover este piloto?</p>
+                <div class="form-actions">
+                    <button class="btn btn-danger" onclick="confirmDelete()">🗑️ Remover</button>
+                    <button class="btn btn-secondary" onclick="closeDeleteModal()">❌ Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

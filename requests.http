@@ -1,0 +1,201 @@
+###
+# API de Fórmula 1 - Exemplos de Requisições
+# Use com REST Client extension do VS Code
+# Instale: ext install humao.rest-client
+###
+
+@baseUrl = http://localhost:3000
+@contentType = application/json
+
+# ==========================================
+# HEALTH CHECK
+# ==========================================
+
+### Verificar se servidor está rodando
+GET {{baseUrl}}/health
+
+### Informações da API
+GET {{baseUrl}}/
+
+# ==========================================
+# DRIVERS - LIST
+# ==========================================
+
+### Listar todos os pilotos
+GET {{baseUrl}}/drivers
+
+### Listar pilotos de um time específico
+GET {{baseUrl}}/drivers?team=Ferrari
+
+### Listar pilotos ativos
+GET {{baseUrl}}/drivers?active=true
+
+### Filtrar por nacionalidade
+GET {{baseUrl}}/drivers?nationality=British
+
+### Ordenar por pontos (decrescente)
+GET {{baseUrl}}/drivers?sort=points
+
+### Ordenar por nome (alfabético)
+GET {{baseUrl}}/drivers?sort=name
+
+### Filtro combinado: Ferrari + ordenado por pontos
+GET {{baseUrl}}/drivers?team=Ferrari&sort=points
+
+### Filtro combinado: Pilotos ativos, britânicos, por pontos
+GET {{baseUrl}}/drivers?nationality=British&active=true&sort=points
+
+# ==========================================
+# DRIVERS - GET BY ID
+# ==========================================
+
+### Obter piloto por ID (Max Verstappen)
+GET {{baseUrl}}/drivers/1
+
+### Obter piloto por ID (Lewis Hamilton)
+GET {{baseUrl}}/drivers/3
+
+### Obter piloto inexistente
+GET {{baseUrl}}/drivers/999
+
+# ==========================================
+# DRIVERS - CREATE
+# ==========================================
+
+### Criar novo piloto - Lewis Hamilton (extra)
+POST {{baseUrl}}/drivers
+Content-Type: {{contentType}}
+
+{
+  "name": "Lewis Hamilton",
+  "team": "Ferrari",
+  "nationality": "British",
+  "number": 44,
+  "points": 350,
+  "championships": 7
+}
+
+### Criar novo piloto - Oscar Piastri
+POST {{baseUrl}}/drivers
+Content-Type: {{contentType}}
+
+{
+  "name": "Oscar Piastri",
+  "team": "McLaren",
+  "nationality": "Australian",
+  "number": 81,
+  "points": 210,
+  "championships": 0
+}
+
+### Criar novo piloto - Sem campos obrigatórios (vai gerar erro 400)
+POST {{baseUrl}}/drivers
+Content-Type: {{contentType}}
+
+{
+  "name": "Teste Piloto"
+}
+
+### Tentar criar com número duplicado (vai gerar erro 409)
+POST {{baseUrl}}/drivers
+Content-Type: {{contentType}}
+
+{
+  "name": "Piloto Teste",
+  "team": "Test Team",
+  "nationality": "Test",
+  "number": 1
+}
+
+# ==========================================
+# DRIVERS - UPDATE
+# ==========================================
+
+### Atualizar pontos de Max Verstappen
+PUT {{baseUrl}}/drivers/1
+Content-Type: {{contentType}}
+
+{
+  "points": 500
+}
+
+### Atualizar nome e pontos
+PUT {{baseUrl}}/drivers/1
+Content-Type: {{contentType}}
+
+{
+  "name": "Max Emilian Verstappen",
+  "points": 475
+}
+
+### Desativar um piloto
+PUT {{baseUrl}}/drivers/1
+Content-Type: {{contentType}}
+
+{
+  "active": false
+}
+
+### Atualizar múltiplos campos
+PUT {{baseUrl}}/drivers/2
+Content-Type: {{contentType}}
+
+{
+  "team": "Mercedes",
+  "points": 300,
+  "championships": 1
+}
+
+# ==========================================
+# DRIVERS - DELETE
+# ==========================================
+
+### Deletar um piloto (será deletado um que criou)
+DELETE {{baseUrl}}/drivers/10
+
+### Tentar deletar piloto inexistente
+DELETE {{baseUrl}}/drivers/999
+
+# ==========================================
+# DRIVERS - RANKING
+# ==========================================
+
+### Obter ranking de pilotos por pontos
+GET {{baseUrl}}/drivers/ranking/points
+
+# ==========================================
+# DRIVERS - TEAMS
+# ==========================================
+
+### Listar todos os times únicos
+GET {{baseUrl}}/drivers/teams
+
+# ==========================================
+# TESTES DE ERRO
+# ==========================================
+
+### Rota não encontrada (404)
+GET {{baseUrl}}/api/inexistente
+
+### Método não permitido (404)
+PATCH {{baseUrl}}/drivers/1
+
+# ==========================================
+# PERFORMANCE & LOAD TESTS
+# ==========================================
+
+### Teste de requisição lenta (sleep 5s)
+GET {{baseUrl}}/health
+
+### Teste com body grande
+POST {{baseUrl}}/drivers
+Content-Type: {{contentType}}
+
+{
+  "name": "{{$randomString 100}}",
+  "team": "{{$randomString 50}}",
+  "nationality": "{{$randomString 30}}",
+  "number": {{$randomInt 1 500}},
+  "points": {{$randomInt 0 1000}},
+  "championships": {{$randomInt 0 10}}
+}

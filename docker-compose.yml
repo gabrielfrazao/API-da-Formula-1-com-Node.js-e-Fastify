@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # Serviço da API F1
+  f1-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: f1-api-container
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - LOG_LEVEL=info
+      - CORS_ORIGIN=http://localhost:3000
+      - CORS_CREDENTIALS=true
+      - RATE_LIMIT=100
+    volumes:
+      # Mount do código para desenvolvimento com hot-reload
+      - .:/app
+      - /app/node_modules
+    # Usar npm run dev para auto-reload
+    command: npm run dev
+    restart: unless-stopped
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    networks:
+      - f1-network
+    labels:
+      - "com.example.description=Formula 1 API with Fastify"
+
+networks:
+  f1-network:
+    driver: bridge
+
+# Para usar: docker-compose up
+# Para desenvolvimento: docker-compose up --build
+# Parar: docker-compose down
+# Ver logs: docker-compose logs -f f1-api
