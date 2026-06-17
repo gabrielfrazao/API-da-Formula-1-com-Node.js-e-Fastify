@@ -606,7 +606,7 @@ Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
 
 **Seu Nome**
 - GitHub: [@gabrielfrazao](https://github.com/gabrielfrazao)
-- LinkedIn: [seu-perfil](https://www.linkedin.com/in/gabriel-frazao-manoel/)
+- LinkedIn: [Gabriel Frazão Manoel](https://www.linkedin.com/in/gabriel-frazao-manoel/)
 
 
 ---
